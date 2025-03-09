@@ -1,0 +1,14 @@
+@startuml
+start
+:ユーザーがSELECTコマンドを入力;
+:SQLParserが解析;
+:QueryExecutorが処理;
+:StorageManagerからデータを取得;
+if (データが存在するか？) then (YES)
+    :取得したデータをフォーマット;
+    :結果を返す;
+else (NO)
+    :エラーメッセージを返す;
+endif
+stop
+@enduml

@@ -1,0 +1,15 @@
+@startuml
+start
+:ユーザーがUPDATEコマンドを入力;
+:SQLParserが解析;
+:QueryExecutorが処理;
+:StorageManagerから対象データを取得;
+if (データが存在するか？) then (YES)
+    :データを更新;
+    :変更を保存;
+    :成功レスポンスを返す;
+else (NO)
+    :エラーメッセージを返す;
+endif
+stop
+@enduml

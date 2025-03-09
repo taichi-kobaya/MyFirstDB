@@ -1,0 +1,17 @@
+@startuml
+participant User
+participant CommandProcessor
+participant Database
+participant Table
+participant JsonStorage
+
+User -> CommandProcessor : select * from users
+CommandProcessor -> Database : select("users")
+Database -> Table : select()
+Table -> JsonStorage : loadFromFile("users.json")
+JsonStorage -> Table : return JSON data
+Table -> Database : return records
+Database -> CommandProcessor : return records
+CommandProcessor -> User : display records
+
+@enduml

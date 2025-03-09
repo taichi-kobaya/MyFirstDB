@@ -1,0 +1,45 @@
+@startuml
+
+interface Storable {
+    String toJson();
+    void fromJson(String json);
+}
+
+class Database {
+    Map<String, Table> tables
+    + void createTable(String name)
+    + void insert(String table, Record record)
+    + List<Record> select(String table)
+    + void update(String table, Record record)
+    + void delete(String table, int id)
+}
+
+class Table {
+    String name
+    List<Record> records
+    + void insert(Record record)
+    + List<Record> select()
+    + void update(Record record)
+    + void delete(int id)
+}
+
+class Record implements Storable {
+    Map<String, Object> data
+    + String toJson()
+    + void fromJson(String json)
+}
+
+class JsonStorage {
+    + void saveToFile(String filename, String json)
+    + String loadFromFile(String filename)
+}
+
+class CommandProcessor {
+    + void processCommand(String command)
+}
+
+Database "1" -- "*" Table
+Table "1" -- "*" Record
+Record ..|> Storable
+
+@enduml

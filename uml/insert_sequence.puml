@@ -1,0 +1,20 @@
+@startuml
+participant User
+participant CommandProcessor
+participant Database
+participant Table
+participant Record
+participant JsonStorage
+
+User -> CommandProcessor : insert into users {"id":1, "name":"Alice"}
+CommandProcessor -> Database : insert("users", {"id":1, "name":"Alice"})
+Database -> Table : insert({"id":1, "name":"Alice"})
+Table -> Record : create Record({"id":1, "name":"Alice"})
+Record -> JsonStorage : saveToFile("users.json", "[{\"id\":1, \"name\":\"Alice\"}]")
+
+JsonStorage -> Table : confirm save
+Table -> Database : confirm insert
+Database -> CommandProcessor : confirm insert
+CommandProcessor -> User : success message
+
+@enduml

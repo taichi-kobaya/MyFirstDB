@@ -1,0 +1,13 @@
+@startuml
+start
+:ユーザーがINSERTコマンドを入力;
+:SQLParserが解析;
+:QueryExecutorが処理;
+if (データのバリデーション) then (OK)
+    :StorageManagerにデータを保存;
+    :成功レスポンスを返す;
+else (NG)
+    :エラーメッセージを返す;
+endif
+stop
+@enduml

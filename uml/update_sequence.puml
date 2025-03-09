@@ -1,0 +1,20 @@
+@startuml
+participant User
+participant CommandProcessor
+participant Database
+participant Table
+participant Record
+participant JsonStorage
+
+User -> CommandProcessor : update users set name="Bob" where id=1
+CommandProcessor -> Database : update("users", {"id":1, "name":"Bob"})
+Database -> Table : update({"id":1, "name":"Bob"})
+Table -> Record : update record with id=1
+Record -> JsonStorage : saveToFile("users.json", "[{\"id\":1, \"name\":\"Bob\"}]")
+
+JsonStorage -> Table : confirm save
+Table -> Database : confirm update
+Database -> CommandProcessor : confirm update
+CommandProcessor -> User : success message
+
+@enduml

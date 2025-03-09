@@ -1,0 +1,33 @@
+@startuml
+
+package "db.core" {
+    [Database]
+}
+
+package "db.table" {
+    [Table]
+}
+
+package "db.row" {
+    [Row]
+}
+
+package "db.sql" {
+    [SQLParser]
+}
+
+package "db.executor" {
+    [QueryExecutor]
+}
+
+package "db.main" {
+    [Main]
+}
+
+[Database] --> [Table]
+[Table] --> [Row]
+[QueryExecutor] --> [Database]
+[QueryExecutor] --> [SQLParser]
+[Main] --> [Database]
+
+@enduml
