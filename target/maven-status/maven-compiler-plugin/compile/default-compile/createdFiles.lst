@@ -1,0 +1,6 @@
+db/table/Table.class
+db/executor/QueryExecutor.class
+db/main/Main.class
+db/sql/SQLParser.class
+db/row/Row.class
+db/core/Database.class
