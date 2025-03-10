@@ -15,7 +15,9 @@ public class Table {
     }
 
     public void insert(Map<String, Object> data) {
-        rows.add(new Row(data));
+        Map<String, Object> rowData = new HashMap<>(data);
+        rowData.putIfAbsent("created_at", new Date());
+        rows.add(new Row(rowData));
     }
 
     public List<Row> selectAll() {
