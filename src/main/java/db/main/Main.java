@@ -27,11 +27,15 @@ public class Main {
         ));
 
         List<Row> activeUsers = users.selectWhere("is_active", true);
+
+        users.update("id", 1, Map.of("name", "Alice Cooper", "is_active", false));
         
         System.out.println("データ一覧:");
         for (Row row : users.selectAll()) {
             System.out.println(row.getData());
         }
+
+        System.out.println();
 
         System.out.println("アクティブなユーザー一覧:");
         for (Row row : activeUsers) {

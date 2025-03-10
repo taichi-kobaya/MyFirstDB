@@ -31,5 +31,13 @@ public class Table {
         }
         return result;
     }
-    
+
+    public void update(String column, Object oldValue, Map<String, Object> newValues) {
+        for (Row row : rows) {
+            if (oldValue.equals(row.getData().get(column))) {
+                row.getData().putAll(newValues);
+            }
+        }
+    } 
 }
+
