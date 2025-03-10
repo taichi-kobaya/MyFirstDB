@@ -25,9 +25,16 @@ public class Main {
             "created_at", new Date(),
             "is_active", false
         ));
+
+        List<Row> activeUsers = users.selectWhere("is_active", true);
         
         System.out.println("データ一覧:");
         for (Row row : users.selectAll()) {
+            System.out.println(row.getData());
+        }
+
+        System.out.println("アクティブなユーザー一覧:");
+        for (Row row : activeUsers) {
             System.out.println(row.getData());
         }
     }

@@ -21,4 +21,15 @@ public class Table {
     public List<Row> selectAll() {
         return rows;
     }
+
+    public List<Row> selectWhere(String column, Object value) {
+        List<Row> result = new ArrayList<>();
+        for (Row row : rows) {
+            if (value.equals(row.getData().get(column))) {
+                result.add(row);
+            }
+        }
+        return result;
+    }
+    
 }
