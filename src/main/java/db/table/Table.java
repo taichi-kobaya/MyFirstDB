@@ -39,5 +39,9 @@ public class Table {
             }
         }
     } 
+
+    public void delete(String column, Object value) {
+        rows.removeIf(row -> value.equals(row.getData().get(column)));
+    }
 }
 

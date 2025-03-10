@@ -30,6 +30,8 @@ public class Main {
 
         users.update("id", 1, Map.of("name", "Alice Cooper", "is_active", false));
         
+        users.delete("id", 2);
+
         System.out.println("データ一覧:");
         for (Row row : users.selectAll()) {
             System.out.println(row.getData());
