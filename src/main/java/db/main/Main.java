@@ -34,6 +34,8 @@ public class Main {
 
         users.insert(Map.of("id", 3, "name", "Charlie"));
 
+        users.insert(Map.of("name", "David"));
+
         System.out.println("データ一覧:");
         for (Row row : users.selectAll()) {
             System.out.println(row.getData());

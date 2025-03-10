@@ -8,6 +8,7 @@ public class Table {
     private String name;
     private List<String> columns;
     private List<Row> rows = new ArrayList<>();
+    private int autoIncrementId = 1;
 
     public Table(String name, List<String> columns) {
         this.name = name;
@@ -16,6 +17,7 @@ public class Table {
 
     public void insert(Map<String, Object> data) {
         Map<String, Object> rowData = new HashMap<>(data);
+        rowData.putIfAbsent("id", autoIncrementId++);
         rowData.putIfAbsent("created_at", new Date());
         rows.add(new Row(rowData));
     }
