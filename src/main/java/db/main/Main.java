@@ -12,8 +12,19 @@ public class Main {
         db.createTable("users", Arrays.asList("id", "name"));
         
         Table users = db.getTable("users");
-        users.insert(Map.of("id", "1", "name", "Alice"));
-        users.insert(Map.of("id", "2", "name", "Bob"));
+        users.insert(Map.of(
+            "id", 1,
+            "name", "Alice",
+            "created_at", new Date(),
+            "is_active", true
+        ));
+        
+        users.insert(Map.of(
+            "id", 2,
+            "name", "Bob",
+            "created_at", new Date(),
+            "is_active", false
+        ));
         
         System.out.println("データ一覧:");
         for (Row row : users.selectAll()) {

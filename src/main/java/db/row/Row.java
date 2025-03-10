@@ -2,15 +2,18 @@ package db.row;
 
 import java.util.*;
 
-// 1行のデータを管理するクラス
 public class Row {
-    private Map<String, String> data;
+    private Map<String, Object> data;
 
-    public Row(Map<String, String> data) {
+    public Row(Map<String, Object> data) {
         this.data = new HashMap<>(data);
     }
 
-    public Map<String, String> getData() {
+    public Map<String, Object> getData() {
         return data;
+    }
+
+    public Object getValue(String key) {
+        return data.get(key);
     }
 }

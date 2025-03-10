@@ -14,7 +14,7 @@ public class Table {
         this.columns = columns;
     }
 
-    public void insert(Map<String, String> data) {
+    public void insert(Map<String, Object> data) {
         rows.add(new Row(data));
     }
 
