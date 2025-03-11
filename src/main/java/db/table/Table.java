@@ -47,5 +47,12 @@ public class Table {
     public void delete(String column, Object value) {
         rows.removeIf(row -> value.equals(row.getData().get(column)));
     }
+
+    public Row findById(int id) {
+        return rows.stream()
+            .filter(row -> id == (int) row.getData().get("id"))
+            .findFirst()
+            .orElse(null); // 該当データがない場合は null を返す
+    }
 }
 

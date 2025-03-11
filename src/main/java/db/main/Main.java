@@ -26,15 +26,20 @@ public class Main {
             "is_active", false
         ));
 
+        // users.update("id", 1, Map.of("name", "Alice Cooper", "is_active", false));
+
         List<Row> activeUsers = users.selectWhere("is_active", true);
-
-        users.update("id", 1, Map.of("name", "Alice Cooper", "is_active", false));
         
-        users.delete("id", 2);
+        // users.delete("id", 2);
 
-        users.insert(Map.of("id", 3, "name", "Charlie"));
+        // users.insert(Map.of("id", 3, "name", "Charlie"));
 
-        users.insert(Map.of("name", "David"));
+        // users.insert(Map.of("name", "David"));
+
+        Row user = users.findById(1);
+        System.out.println("Id 1 のユーザー: " + (user != null ? user.getData() : "該当なし"));
+
+        System.out.println();
 
         System.out.println("データ一覧:");
         for (Row row : users.selectAll()) {
@@ -42,9 +47,9 @@ public class Main {
         }
 
         System.out.println();
-
+        
         System.out.println("アクティブなユーザー一覧:");
-        for (Row row : activeUsers) {
+        for (Row row : users.selectWhere("is_active", true)) {
             System.out.println(row.getData());
         }
     }
