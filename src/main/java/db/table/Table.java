@@ -8,6 +8,7 @@ public class Table {
     private String name;
     private List<String> columns;
     private List<Row> rows = new ArrayList<>();
+    private List<String> uniqueColumns = List.of("name");
     private int autoIncrementId = 1;
 
     public Table(String name, List<String> columns) {
@@ -16,6 +17,19 @@ public class Table {
     }
 
     public void insert(Map<String, Object> data) {
+        for (String column : uniqueColumns) {
+            Object value = data.get(column);
+            Optional<Row> existingRow = Optional.empty();
+            if(value != null) {
+                existingRow = rows.stream()
+                    .filter(row -> value.equals(row.getData().get(column)))
+                    .findFirst();
+            }
+            if (existingRow.isPresent()) {
+                throw new IllegalArgumentException("重複する値が存在します: " + column + "=" + value + 
+                    " (既存のID: " + existingRow.get().getData().get("id") + ")");
+            }
+        }
         Map<String, Object> rowData = new HashMap<>(data);
         rowData.putIfAbsent("id", autoIncrementId++);
         rowData.putIfAbsent("created_at", new Date());
