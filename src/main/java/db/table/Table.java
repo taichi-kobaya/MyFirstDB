@@ -2,8 +2,8 @@ package db.table;
 
 import db.row.Row;
 import java.util.*;
+import java.util.stream.Collectors;
 
-// テーブル管理クラス
 public class Table {
     private String name;
     private List<String> columns;
@@ -19,21 +19,27 @@ public class Table {
     public void insert(Map<String, Object> data) {
         for (String column : uniqueColumns) {
             Object value = data.get(column);
-            Optional<Row> existingRow = Optional.empty();
-            if(value != null) {
-                existingRow = rows.stream()
-                    .filter(row -> value.equals(row.getData().get(column)))
-                    .findFirst();
-            }
-            if (existingRow.isPresent()) {
+            if (value != null && isDuplicateValue(column, value)) {
                 throw new IllegalArgumentException("重複する値が存在します: " + column + "=" + value + 
-                    " (既存のID: " + existingRow.get().getData().get("id") + ")");
+                        " (既存のID: " + findDuplicateRow(column, value).getData().get("id") + ")");
             }
         }
-        Map<String, Object> rowData = new HashMap<>(data);
-        rowData.putIfAbsent("id", autoIncrementId++);
-        rowData.putIfAbsent("created_at", new Date());
-        rows.add(new Row(rowData));
+        Map<String, Object> insertedRowData = new HashMap<>(data);
+        insertedRowData.putIfAbsent("id", autoIncrementId++);
+        insertedRowData.putIfAbsent("created_at", new Date());
+        rows.add(new Row(insertedRowData));
+    }
+
+    private boolean isDuplicateValue(String column, Object value) {
+        return rows.stream()
+                .anyMatch(row -> value.equals(row.getData().get(column)));
+    }
+
+    private Row findDuplicateRow(String column, Object value) {
+        return rows.stream()
+                .filter(row -> value.equals(row.getData().get(column)))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("重複する値が存在しません"));
     }
 
     public List<Row> selectAll() {
@@ -41,13 +47,9 @@ public class Table {
     }
 
     public List<Row> selectWhere(String column, Object value) {
-        List<Row> result = new ArrayList<>();
-        for (Row row : rows) {
-            if (value.equals(row.getData().get(column))) {
-                result.add(row);
-            }
-        }
-        return result;
+        return rows.stream()
+                .filter(row -> value.equals(row.getData().get(column)))
+                .collect(Collectors.toList());
     }
 
     public void update(String column, Object oldValue, Map<String, Object> newValues) {
@@ -56,7 +58,7 @@ public class Table {
                 row.getData().putAll(newValues);
             }
         }
-    } 
+    }
 
     public void delete(String column, Object value) {
         rows.removeIf(row -> value.equals(row.getData().get(column)));
@@ -64,9 +66,15 @@ public class Table {
 
     public Row findById(int id) {
         return rows.stream()
+                .filter(row -> id == (int) row.getData().get("id"))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public void softDelete(int id) {
+        rows.stream()
             .filter(row -> id == (int) row.getData().get("id"))
             .findFirst()
-            .orElse(null); // 該当データがない場合は null を返す
+            .ifPresent(row -> row.getData().put("is_deleted", true));
     }
 }
-
