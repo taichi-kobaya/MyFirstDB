@@ -10,49 +10,31 @@ public class Main {
         // データベースとテーブルのセットアップ
         Database db = new Database();
         db.createTable("users", Arrays.asList("id", "name", "is_deleted"));
-        
+
         Table users = db.getTable("users");
 
         // ユーザーのデータ挿入
         users.insert(Map.of("id", 1, "name", "Alice", "is_deleted", false));
         users.insert(Map.of("id", 2, "name", "Bob", "is_deleted", false));
 
-        // ソフト削除: ID=1 のユーザーを削除
-        System.out.println("ソフト削除前のデータ一覧:");
+        // 更新前のデータ表示
+        System.out.println("更新前のデータ一覧:");
         for (Row row : users.selectAll()) {
             System.out.println(row.getData());
         }
 
-        users.softDelete(1);  // ID=1 のユーザーを論理削除
+        // ID=2 のユーザーの名前を更新し、updated_at を自動設定
+        users.update(2, Map.of("name", "Bob Smith"));
 
-        // ソフト削除後のデータ表示
-        System.out.println("\nソフト削除後のデータ一覧:");
+        // 更新後のデータ表示
+        System.out.println("\n更新後のデータ一覧:");
         for (Row row : users.selectAll()) {
             System.out.println(row.getData());
         }
 
-        // ID=1 のユーザーを再度取得して表示
-        Row user = users.findById(1);
-        System.out.println("\nID 1 のユーザー:");
-        System.out.println(user != null ? user.getData() : "該当なし");
-
-        // 他のユーザーのデータも確認
-        Row user2 = users.findById(2);
-        System.out.println("\nID 2 のユーザー:");
-        System.out.println(user2 != null ? user2.getData() : "該当なし");
-
-        // アクティブなユーザーの一覧を取得
-        System.out.println("\nアクティブなユーザー一覧:");
-        for (Row row : users.selectWhere("is_deleted", false)) {
-            System.out.println(row.getData());
-        }
-
-        // その他の操作のテスト
-        /*
-        users.insert(Map.of("id", 3, "name", "Charlie"));
-        users.update("id", 1, Map.of("name", "Alice Cooper", "is_active", false));
-        users.delete("id", 2);
-        Row user = users.findById(1);
-        */
+        // ID=2 のユーザーの情報を取得
+        Row updatedUser = users.findById(2);
+        System.out.println("\nID 2 の更新後のデータ:");
+        System.out.println(updatedUser != null ? updatedUser.getData() : "該当なし");
     }
 }

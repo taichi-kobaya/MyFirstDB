@@ -52,12 +52,14 @@ public class Table {
                 .collect(Collectors.toList());
     }
 
-    public void update(String column, Object oldValue, Map<String, Object> newValues) {
-        for (Row row : rows) {
-            if (oldValue.equals(row.getData().get(column))) {
-                row.getData().putAll(newValues);
-            }
-        }
+    public void update(int id, Map<String, Object> newData) {
+        rows.stream()
+            .filter(row -> id == (int) row.getData().get("id"))
+            .findFirst()
+            .ifPresent(row -> {
+                row.getData().putAll(newData);
+                row.getData().put("updated_at", new Date());
+            });
     }
 
     public void delete(String column, Object value) {
